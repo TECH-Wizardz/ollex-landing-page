@@ -6,8 +6,7 @@ import { ChevronDown, Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { PRODUCT_NAME } from "@/lib/brand";
-import { loginUrl } from "@/lib/links";
-import { CtaLink } from "./cta-link";
+import { GetStartedButton } from "./get-started-button";
 import { LogoMark } from "./logo-mark";
 import { useUseCase } from "./use-case-provider";
 import {
@@ -114,29 +113,12 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <div className="hidden items-center gap-5 lg:flex">
-          <Link href={loginUrl()} className="text-base text-lp-ink">
-            Sign in
-          </Link>
-          <CtaLink
-            href={loginUrl()}
-            size="nav"
-            event="trial"
-            section="nav"
-          >
-            Start free trial
-          </CtaLink>
+        <div className="hidden items-center lg:flex">
+          <GetStartedButton size="nav" section="nav" />
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-3 lg:hidden">
-          <CtaLink
-            href={loginUrl()}
-            size="nav-compact"
-            event="trial"
-            section="nav"
-          >
-            Start free
-          </CtaLink>
+          <GetStartedButton size="nav-compact" section="nav" />
           <button
             type="button"
             aria-label="Menu"
@@ -184,12 +166,6 @@ export function SiteHeader() {
             className={cn(MOBILE_LINK, "border-t border-lp-border")}
           >
             Resources
-          </Link>
-          <Link
-            href={loginUrl()}
-            className={cn(MOBILE_LINK, "border-t border-lp-border")}
-          >
-            Sign in
           </Link>
         </div>
       ) : null}

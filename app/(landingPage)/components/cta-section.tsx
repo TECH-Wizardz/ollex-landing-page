@@ -1,6 +1,4 @@
-import { loginUrl } from "@/lib/links";
-import { CtaLink } from "./cta-link";
-import { DemoButton } from "./demo-button";
+import { GetStartedButton } from "./get-started-button";
 import { LandingSection } from "./landing-section";
 
 export function CtaSection() {
@@ -10,13 +8,8 @@ export function CtaSection() {
         <h2 className="max-w-180 font-display text-lp-h2-cta font-semibold tracking-[-0.035em] text-balance">
           Give your clients a portal they&apos;ll actually finish
         </h2>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <CtaLink href={loginUrl()} event="trial" section="final">
-            Start free trial
-          </CtaLink>
-          <DemoButton variant="surface" section="final">
-            Book a demo
-          </DemoButton>
+        <div className="mt-8 flex justify-center">
+          <GetStartedButton section="final" />
         </div>
       </div>
     </LandingSection>

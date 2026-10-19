@@ -1,9 +1,7 @@
 import { ArrowRight, Check } from "lucide-react";
 
 import { PRODUCT_NAME } from "@/lib/brand";
-import { loginUrl } from "@/lib/links";
-import { CtaLink } from "./cta-link";
-import { DemoButton } from "./demo-button";
+import { GetStartedButton } from "./get-started-button";
 import { HeroDoodles } from "./hero-doodles";
 import { HeroPortalDemo } from "./hero-portal-demo";
 
@@ -65,22 +63,15 @@ export function HeroSection() {
             </span>
           </p>
 
-          {/* Stacked on a phone, the two CTAs stretch to the same full width; side by
-              side from `sm` up, each as wide as its label. */}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <CtaLink
-              href={loginUrl()}
+          <div className="mt-8 flex flex-col sm:flex-row">
+            <GetStartedButton
               size="hero"
-              event="trial"
               section="hero"
               className="pl-7 shadow-rl-3"
             >
-              Start free trial
+              Get started
               <ArrowRight size={18} strokeWidth={2} />
-            </CtaLink>
-            <DemoButton variant="outline" size="hero" section="hero">
-              Book a demo
-            </DemoButton>
+            </GetStartedButton>
           </div>
 
           <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-lp-muted">

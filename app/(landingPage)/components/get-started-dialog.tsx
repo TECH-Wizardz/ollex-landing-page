@@ -5,7 +5,7 @@ import { Check, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { PRODUCT_NAME } from "@/lib/brand";
-import { TEAM_SIZES, isValidEmail, submitDemoRequest } from "@/lib/demo-request";
+import { isValidEmail, submitGetStarted } from "@/lib/get-started";
 import { track } from "@/lib/track";
 import { ctaClassName } from "./cta-styles";
 
@@ -13,7 +13,7 @@ type Status = "idle" | "sending" | "sent" | "error";
 
 const LABEL = "text-sm font-medium text-lp-ink";
 
-export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
+export function GetStartedDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
   const [status, setStatus] = useState<Status>("idle");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState("");
@@ -32,11 +32,10 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = String(data.get("email") ?? "").trim();
-    const teamSize = TEAM_SIZES.find((size) => size === data.get("teamSize")) ?? null;
 
     if (!isValidEmail(email)) {
       setEmailError(
-        email ? "Enter a valid email address." : "Enter your work email."
+        email ? "Enter a valid email address." : "Enter your email."
       );
       emailRef.current?.focus();
       return;
@@ -45,8 +44,8 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
     setEmailError(null);
     setStatus("sending");
     try {
-      await submitDemoRequest({ email, teamSize });
-      track("demo_request_submit", { team_size: teamSize ?? "not_given" });
+      await submitGetStarted({ email });
+      track("get_started_submit");
       setSentTo(email);
       setStatus("sent");
     } catch {
@@ -57,8 +56,8 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
   return (
     <dialog
       ref={ref}
-      aria-labelledby="demo-title"
-      aria-describedby="demo-description"
+      aria-labelledby="get-started-title"
+      aria-describedby="get-started-description"
       onClose={reset}
       onMouseDown={(e) => {
         pressedBackdrop.current = e.target === e.currentTarget;
@@ -87,15 +86,18 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
               <Check size={24} strokeWidth={2.5} />
             </span>
             <h2
-              id="demo-title"
+              id="get-started-title"
               className="mt-5 font-display text-xl font-semibold tracking-[-0.02em]"
             >
-              Request received
+              Thanks, we&apos;ve got it
             </h2>
-            <p id="demo-description" className="mt-2 text-rl-body text-lp-muted">
-              We&apos;ll email a calendar link to{" "}
-              <span className="font-medium break-words text-lp-ink">{sentTo}</span>{" "}
-              within one business day.
+            <p
+              id="get-started-description"
+              className="mt-2 text-rl-body text-lp-muted"
+            >
+              We&apos;ll be in touch at{" "}
+              <span className="font-medium wrap-break-word text-lp-ink">{sentTo}</span>{" "}
+              shortly.
             </p>
             <form method="dialog" className="mt-6 w-full">
               <button
@@ -109,24 +111,26 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
         ) : (
           <>
             <h2
-              id="demo-title"
+              id="get-started-title"
               className="pr-8 font-display text-xl font-semibold tracking-[-0.02em]"
             >
-              Book a 15-minute demo
+              Get started with {PRODUCT_NAME}
             </h2>
-            <p id="demo-description" className="mt-2 text-base text-lp-muted">
-              Tell us where to send the invite and we&apos;ll show you{" "}
-              {PRODUCT_NAME} with your own client requests.
+            <p
+              id="get-started-description"
+              className="mt-2 text-base text-lp-muted"
+            >
+              Enter your email and we&apos;ll get you set up.
             </p>
 
             <form onSubmit={onSubmit} noValidate className="mt-6 flex flex-col gap-5">
               <div>
-                <label htmlFor="demo-email" className={LABEL}>
-                  Work email
+                <label htmlFor="get-started-email" className={LABEL}>
+                  Email
                 </label>
                 <input
                   ref={emailRef}
-                  id="demo-email"
+                  id="get-started-email"
                   name="email"
                   type="email"
                   inputMode="email"
@@ -135,7 +139,9 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
                   required
                   data-autofocus
                   aria-invalid={emailError ? true : undefined}
-                  aria-describedby={emailError ? "demo-email-error" : undefined}
+                  aria-describedby={
+                    emailError ? "get-started-email-error" : undefined
+                  }
                   onChange={() => emailError && setEmailError(null)}
                   className={cn(
                     "mt-2 h-11 w-full rounded-rl-sm border bg-lp-bg px-3 text-rl-body text-lp-ink placeholder:text-lp-muted",
@@ -144,7 +150,7 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
                 />
                 {emailError ? (
                   <p
-                    id="demo-email-error"
+                    id="get-started-email-error"
                     role="alert"
                     className="mt-1.5 text-sm text-lp-danger"
                   >
@@ -153,25 +159,6 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
                 ) : null}
               </div>
 
-              <fieldset>
-                <legend className={LABEL}>Team size</legend>
-                <div className="mt-2 grid grid-cols-4 gap-2">
-                  {TEAM_SIZES.map((size) => (
-                    <label key={size} className="relative">
-                      <input
-                        type="radio"
-                        name="teamSize"
-                        value={size}
-                        className="peer sr-only"
-                      />
-                      <span className="grid h-10 cursor-pointer place-items-center rounded-rl-6 border border-lp-border bg-lp-bg text-base text-lp-ink transition-colors hover:bg-lp-subtle peer-checked:border-lp-primary peer-checked:bg-lp-b-brand-bg peer-checked:text-lp-b-brand-fg peer-focus-visible:shadow-(--ring-focus)">
-                        {size}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
               <div className="flex flex-col gap-3">
                 <button
                   type="submit"
@@ -179,18 +166,13 @@ export function DemoDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
                   aria-busy={status === "sending"}
                   className={ctaClassName("primary", "block")}
                 >
-                  {status === "sending" ? "Sending…" : "Book my demo"}
+                  {status === "sending" ? "Sending…" : "Get started"}
                 </button>
                 {status === "error" ? (
                   <p role="alert" className="text-center text-sm text-lp-danger">
-                    We couldn&apos;t send your request. Please try again in a
-                    moment.
+                    We couldn&apos;t send that. Please try again in a moment.
                   </p>
                 ) : null}
-                <p className="text-center text-sm text-lp-muted">
-                  No sales pitch. We&apos;ll email a calendar link within one
-                  business day.
-                </p>
               </div>
             </form>
           </>

@@ -1,12 +1,11 @@
 "use client";
 
 import type { KeyboardEvent } from "react";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { loginUrl } from "@/lib/links";
 import { EYEBROW_CLASS, H2_CLASS } from "./section-heading";
+import { useGetStartedDialog } from "./get-started-dialog-provider";
 import { LandingSection } from "./landing-section";
 import { MockCard } from "./mock-card";
 import { StatusPill, toneOf } from "./status-pill";
@@ -15,6 +14,7 @@ import { USE_CASE_ORDER, USE_CASES, type UseCaseKey } from "./use-cases.data";
 
 export function UseCasesSection() {
   const { active, select } = useUseCase();
+  const { open } = useGetStartedDialog();
   const useCase = USE_CASES[active];
   const approved = useCase.items.filter(([, status]) => status === "Approved");
   const pct = Math.round((approved.length / useCase.items.length) * 100);
@@ -88,13 +88,14 @@ export function UseCasesSection() {
             Example request:{" "}
             <span className="text-lp-ink">{useCase.example}</span>
           </p>
-          <Link
-            href={loginUrl()}
+          <button
+            type="button"
+            onClick={() => open("use_cases")}
             className="mt-6 inline-flex items-center gap-1.5 font-medium"
           >
             Try it with your clients
             <ArrowRight size={16} strokeWidth={2} />
-          </Link>
+          </button>
         </div>
 
         <div

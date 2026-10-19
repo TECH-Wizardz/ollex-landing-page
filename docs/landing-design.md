@@ -89,5 +89,5 @@ Identical in both themes, like the sticky note: `--color-lp-brand-forest #2f4b3a
 
 - Reveal-on-scroll (200ms fade + 16px rise, once) applies only to sections that start below the fold, and never to reduced-motion visitors; the page renders fully visible without JavaScript.
 - The hero's highlighter swipe and strike-through draw once on load (CSS keyframes `lp-highlight`, `lp-strike`). The mock portal ticks 2 → 5 of 5 on a timer; reduced motion renders the finished state.
-- Below `sm`, a fixed "Start free trial" bar appears once the hero has scrolled out of view.
+- Below `sm`, a fixed "Get started" bar appears once the hero has scrolled out of view.
 

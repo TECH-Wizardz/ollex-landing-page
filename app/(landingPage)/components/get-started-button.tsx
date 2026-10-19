@@ -3,37 +3,33 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { track } from "@/lib/track";
 import { ctaClassName, type CtaSize, type CtaVariant } from "./cta-styles";
-import { useDemoDialog } from "./demo-dialog-provider";
+import { useGetStartedDialog } from "./get-started-dialog-provider";
 
-interface DemoButtonProps {
+interface GetStartedButtonProps {
   variant?: CtaVariant;
   size?: CtaSize;
   /** Which part of the page the button sits in, reported with the click event. */
   section: string;
   className?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
-/** "Book a demo": opens the demo modal. */
-export function DemoButton({
+/** "Get started": opens the email modal. The page's only call to action. */
+export function GetStartedButton({
   variant = "primary",
   size = "md",
   section,
   className,
-  children,
-}: DemoButtonProps) {
-  const { open } = useDemoDialog();
+  children = "Get started",
+}: GetStartedButtonProps) {
+  const { open } = useGetStartedDialog();
 
   return (
     <button
       type="button"
       className={cn(ctaClassName(variant, size), className)}
-      onClick={() => {
-        track("cta_demo_click", { section });
-        open();
-      }}
+      onClick={() => open(section)}
     >
       {children}
     </button>

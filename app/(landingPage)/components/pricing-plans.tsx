@@ -3,9 +3,8 @@
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { loginUrl } from "@/lib/links";
 import { track } from "@/lib/track";
-import { CtaLink } from "./cta-link";
+import { GetStartedButton } from "./get-started-button";
 
 const PLANS = [
   { name: "Starter", limit: "Up to 40 active clients", monthly: 59 },
@@ -104,16 +103,12 @@ export function PricingPlans() {
                 ? `$${(plan.monthly * 10).toLocaleString("en-US")} billed yearly`
                 : "Billed monthly"}
             </div>
-            <CtaLink
-              href={loginUrl()}
+            <GetStartedButton
               variant={plan.popular ? "primary" : "surface"}
               size="block"
-              event="trial"
               section={`pricing_${plan.name.toLowerCase()}`}
               className="mt-7"
-            >
-              Start free trial
-            </CtaLink>
+            />
           </div>
         ))}
       </div>
