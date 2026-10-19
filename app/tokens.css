@@ -1,0 +1,456 @@
+/*
+  Design tokens for the landing page. Vendored from the Ollect monorepo's
+  shared @ollect/ui package when this app moved to its own repo, so it still
+  carries tokens (provider / portal surfaces) this page does not use.
+
+  app/globals.css imports "tailwindcss", "tw-animate-css" and
+  "shadcn/tailwind.css", then this file, then adds the keyframes only this app
+  uses.
+
+  Adding a `--text-*` token here? Also list it in the font-size group in
+  ../lib/utils.ts, or tailwind-merge will treat it as a text color.
+
+  Design tokens ported from the Ollect design system
+  (claude.ai/design project 49a4df2d -- onbora-design-system).
+  Source: colors.css, semantic.css, typography.css, radius.css, shadows.css, motion.css.
+*/
+
+@theme {
+  --font-sans: "SF Pro Display", -apple-system, BlinkMacSystemFont, Arial,
+    sans-serif;
+  /* `--font-jetbrains-mono` is only set by an app that loads the font; the
+     fallback keeps `font-mono` valid everywhere else. */
+  --font-mono: var(--font-jetbrains-mono, ui-monospace), ui-monospace,
+    SFMono-Regular, Menlo, monospace;
+
+  /* Base palette -- brand blue */
+  --color-brand-50: #eff4ff;
+  --color-brand-100: #dce7ff;
+  --color-brand-200: #bbd0ff;
+  --color-brand-300: #8fb0ff;
+  --color-brand-400: #5e8dff;
+  --color-brand-500: #3a72f8;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4fd0;
+  --color-brand-800: #1a3fa3;
+  --color-brand-900: #15306f;
+
+  /* Base palette -- cool neutrals */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fafafb;
+  --color-neutral-100: #f4f5f7;
+  --color-neutral-200: #e8eaef;
+  --color-neutral-300: #d6d9e0;
+  --color-neutral-400: #aeb3be;
+  --color-neutral-500: #868c99;
+  --color-neutral-600: #646a78;
+  --color-neutral-700: #474d5a;
+  --color-neutral-800: #2c313b;
+  --color-neutral-900: #14171d;
+
+  /* Base palette -- periwinkle accent */
+  --color-accent-50: #f5f3fe;
+  --color-accent-100: #eae6fd;
+  --color-accent-200: #d8d1fa;
+  --color-accent-300: #c1b6f5;
+  --color-accent-400: #a697ee;
+  --color-accent-500: #8b78e4;
+  --color-accent-600: #6f5cc4;
+
+  /* Base palette -- semantics */
+  --color-green-50: #ecfaf2;
+  --color-green-500: #12a150;
+  --color-green-600: #0e8442;
+  --color-amber-50: #fff8eb;
+  --color-amber-500: #d08700;
+  --color-amber-600: #a96a00;
+  --color-red-50: #fef1f1;
+  --color-red-500: #e0453f;
+  --color-red-600: #bc332e;
+  --color-info-50: #eef6fe;
+  --color-info-500: #0e8fe0;
+  --color-info-600: #0a72b4;
+
+  /* Semantic text */
+  --color-text-strong: var(--color-neutral-900);
+  --color-text-body: var(--color-neutral-800);
+  --color-text-muted: var(--color-neutral-600);
+  --color-text-subtle: var(--color-neutral-500);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-text-brand: var(--color-brand-700);
+  --color-text-link: var(--color-brand-700);
+  --color-text-success: var(--color-green-600);
+  --color-text-warning: var(--color-amber-600);
+  --color-text-danger: var(--color-red-600);
+
+  /* Semantic surfaces */
+  --color-surface-page: var(--color-neutral-50);
+  --color-surface-card: var(--color-neutral-0);
+  --color-surface-sunken: var(--color-neutral-100);
+  --color-surface-overcast: var(--color-neutral-200);
+  --color-surface-inverse: var(--color-neutral-900);
+  --color-surface-brand: var(--color-brand-600);
+  --color-surface-brand-strong: var(--color-brand-700);
+  --color-surface-brand-subtle: var(--color-brand-50);
+  --color-surface-accent-subtle: var(--color-accent-50);
+  --color-surface-success-subtle: var(--color-green-50);
+  --color-surface-warning-subtle: var(--color-amber-50);
+  --color-surface-danger-subtle: var(--color-red-50);
+  --color-surface-info-subtle: var(--color-info-50);
+  --color-surface-hover: var(--color-neutral-100);
+  --color-surface-active: var(--color-neutral-200);
+
+  /* Semantic borders */
+  --color-border-subtle: var(--color-neutral-200);
+  --color-border-default: var(--color-neutral-300);
+  --color-border-strong: var(--color-neutral-400);
+  --color-border-brand: var(--color-brand-500);
+  --color-border-focus: var(--color-brand-500);
+
+  /* Progress */
+  --color-progress-track: var(--color-neutral-200);
+  --color-progress-fill: var(--color-brand-500);
+  --color-progress-fill-complete: var(--color-green-500);
+  --color-progress-fill-attention: var(--color-amber-500);
+
+  /* Sidebar (dark app chrome) */
+  --color-sidebar: var(--color-neutral-900); /* #14171d surface */
+  --color-sidebar-foreground: var(--color-neutral-500); /* idle nav text/icon */
+  --color-sidebar-foreground-active: var(--color-neutral-0);
+  --color-sidebar-active: #253056; /* active row bg (blue-tinted) */
+  --color-sidebar-hover: #1e2330; /* idle row hover bg */
+  --color-sidebar-border: #262b36; /* hairline divider */
+
+  /* Type scale -- 15px UI base, few display sizes */
+  --text-2xs: 11px;
+  --text-2xs--line-height: 1.3;
+  --text-xs: 12px;
+  --text-xs--line-height: 1.3;
+  --text-sm: 13px;
+  --text-sm--line-height: 1.4;
+  --text-base: 15px;
+  --text-base--line-height: 1.65;
+  --text-md: 17px;
+  --text-md--line-height: 1.6;
+  --text-lg: 20px;
+  --text-lg--line-height: 1.3;
+  --text-xl: 24px;
+  --text-xl--line-height: 1.25;
+  --text-2xl: 30px;
+  --text-2xl--line-height: 1.2;
+  --text-3xl: 38px;
+  --text-3xl--line-height: 1.12;
+  --text-4xl: 48px;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 60px;
+  --text-5xl--line-height: 1.06;
+
+  /* Radius -- purpose-built scale, not a multiplier */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 20px;
+  --radius-3xl: 28px;
+
+  /* Shadows -- cool ink-tinted, low contrast */
+  --shadow-xs: 0 1px 1px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 2px 6px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.09), 0 2px 6px rgba(15, 23, 42, 0.05);
+  --shadow-xl: 0 20px 48px rgba(15, 23, 42, 0.14), 0 4px 12px rgba(15, 23, 42, 0.06);
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-gentle-spring: cubic-bezier(0.34, 1.3, 0.64, 1);
+
+  /* =========================================================================
+     Rocketlane / Ollect design system (design-system.md) -- ADDITIVE.
+     Prefix: rl-. Coexists with the tokens above; nothing above changes
+     except --font-sans. Values are verbatim from design-system.md section 3.
+     ========================================================================= */
+
+  /* Brand */
+  --color-rl-blue: #0f62fe;
+  --color-rl-blue-hover: #4589ff;
+  --color-rl-black: #1d1d1f;
+  --color-rl-white: #ffffff;
+  --color-rl-grey: #f5f5f7;
+  --color-rl-orange: #ff7832;
+
+  /* Neutral ramp (Carbon) */
+  --color-rl-grey-100: #000000;
+  --color-rl-grey-95: #161616;
+  --color-rl-grey-90: #262626;
+  --color-rl-grey-70: #6f6f6f;
+  --color-rl-grey-50: #8d8d8d;
+  --color-rl-grey-30: #e0e0e0;
+  --color-rl-grey-15: #f4f4f5;
+  --color-rl-grey-10: #f5f5f7;
+  --color-rl-grey-00: #ffffff;
+
+  /* Blue ramp */
+  --color-rl-blue-darkest: #001d6c;
+  --color-rl-blue-lighter: #d0e2ff;
+  --color-rl-blue-lightest: #f0f6ff;
+
+  /* Extended accents */
+  --color-rl-purple: #8a3ffc;
+  --color-rl-purple-dark: #31135e;
+  --color-rl-cyan: #007d79;
+  --color-rl-blue-cyan: #0072c3;
+  --color-rl-note-yellow: #fff7cc;
+  --color-rl-path-tan: #c9b38a;
+  --color-rl-cream: #fbf8f1;
+  --color-rl-hill-green: #e3eedc;
+  --color-rl-sunset-peach: #ffb38a;
+  --color-rl-sunset-gold: #f6d6a8;
+  --color-rl-sunset-sage: #bfd8b8;
+  --color-rl-evening-navy: #0e1b2c;
+
+  /* Semantic (base / surface / dark) */
+  --color-rl-success: #198038;
+  --color-rl-success-surface: #defbe6;
+  --color-rl-error: #da1e28;
+  --color-rl-error-surface: #fff1f1;
+  --color-rl-error-dark: #520408;
+  --color-rl-warning: #ffdd32;
+  --color-rl-warning-surface: #fffdf5;
+  --color-rl-warning-dark: #513d02;
+  --color-rl-info: #ff7832;
+  --color-rl-info-surface: #fff8f5;
+  --color-rl-magenta: #d12771;
+  --color-rl-magenta-surface: #fff0f7;
+  --color-rl-magenta-dark: #510224;
+  /* Violet -- imported from the Client Portal canvas (project 0b090685),
+     the "Awaiting signature" status tone. See design-system.md 1.1. */
+  --color-rl-violet: #6929c4;
+  --color-rl-violet-surface: #f6f2ff;
+
+  /* Text roles */
+  --color-rl-text-heading: #1d1d1f;
+  --color-rl-text-body: #000000;
+  --color-rl-text-muted: #8d8d8d;
+  --color-rl-text-disabled: rgba(29, 29, 31, 0.5);
+  --color-rl-text-inverse: #ffffff;
+  --color-rl-text-link: #0f62fe;
+  --color-rl-text-link-hover: #4589ff;
+
+  /* Type scale (px); Tailwind auto-pairs --text-*--line-height */
+  --text-rl-display: 56px;
+  --text-rl-display--line-height: 1.2;
+  --text-rl-h2: 48px;
+  --text-rl-h2--line-height: 1.2;
+  --text-rl-h3: 39px;
+  --text-rl-h3--line-height: 1.3;
+  --text-rl-h4: 31px;
+  --text-rl-h4--line-height: 1.4;
+  --text-rl-h5: 25px;
+  --text-rl-h5--line-height: 1.4;
+  --text-rl-h6: 20px;
+  --text-rl-h6--line-height: 1.5;
+  --text-rl-body-lg: 18px;
+  --text-rl-body-lg--line-height: 1.5;
+  --text-rl-body: 16px;
+  --text-rl-body--line-height: 1.5;
+  --text-rl-caption: 13px;
+  --text-rl-caption--line-height: 1.5;
+  --text-rl-caption-xs: 12.8px;
+  --text-rl-caption-xs--line-height: 1.5;
+
+  /* Letter-spacing */
+  --tracking-rl-heading: 0.15px;
+
+  /* Radius */
+  --radius-rl-sm: 2px;
+  --radius-rl-4: 4px;
+  --radius-rl-6: 6px;
+  --radius-rl-8: 8px;
+  --radius-rl-md: 24px;
+  --radius-rl-lg: 40px;
+  --radius-rl-full: 9999px;
+
+  /* Elevation (sits in the --shadow-* namespace to generate utilities) */
+  --shadow-rl-1: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-rl-2: 0 4px 7px rgba(0, 0, 0, 0.11);
+  --shadow-rl-3: 0 8px 30px rgba(0, 0, 0, 0.1);
+  --shadow-rl-4: 0 14px 20px rgba(0, 0, 0, 0.11), 0 76px 172px rgba(0, 0, 0, 0.13);
+
+  /* Spacing (8-pt). Prefixed -- a bare --spacing-3 would redefine p-3 globally. */
+  --spacing-rl-0-5: 4px;
+  --spacing-rl-1: 8px;
+  --spacing-rl-2: 16px;
+  --spacing-rl-3: 24px;
+  --spacing-rl-4: 32px;
+  --spacing-rl-5: 40px;
+  --spacing-rl-6: 48px;
+  --spacing-rl-7: 56px;
+  --spacing-rl-8: 64px;
+  --spacing-rl-10: 80px;
+  --spacing-rl-14: 112px;
+  --spacing-rl-15: 120px;
+  --spacing-rl-18: 144px;
+
+  /* Motion */
+  --ease-rl: ease;
+
+  /* -------------------------------------------------------------------------
+     Horizontal wizard -- imported measurements (design-system.md 2.5).
+     Taken verbatim from the "Client Onboarding" Claude Design canvas
+     (project 0b090685, `Client Onboarding.dc.html`). The canvas was authored
+     in raw CSS, so a few of its values sit off the 8-pt grid and off the type
+     scale. They are namespaced to this layout and must NOT be reused as
+     general-purpose steps -- if a value here also exists on the base scale,
+     use the base token instead (the card radius is 6px, so it uses
+     --radius-rl-6; the rail track gap is 8px, so it uses --spacing-rl-1).
+     ------------------------------------------------------------------------- */
+  --spacing-rl-step-card: 196px; /* fixed step-card width */
+  --spacing-rl-step-pad-y: 12px;
+  --spacing-rl-step-pad-x: 14px;
+  --spacing-rl-step-gap: 10px; /* status circle -> text column */
+  --spacing-rl-step-gap-tight: 2px; /* title -> status label */
+  --text-rl-step-title: 14px;
+  --text-rl-step-title--line-height: 1.35;
+  --text-rl-step-label: 12px;
+  --text-rl-step-label--line-height: 1.5;
+
+  --spacing-rl-wizard: 880px; /* step-body column max width, both desktop layouts */
+  --spacing-rl-wizard-strip-y: 12px; /* progress-strip padding-y */
+
+  /* -------------------------------------------------------------------------
+     Sidebar progress -- imported measurements (design-system.md 2.6).
+     Taken verbatim from the "Website Onboarding" Claude Design canvas
+     (project 0b090685, `Website Onboarding.dc.html`), on the same terms as the
+     block above: namespaced to this layout, never reused as general steps.
+     The rail's row type happens to match the wizard card's (14px / 12px) but is
+     spelled out separately -- the two layouts resize independently.
+     ------------------------------------------------------------------------- */
+  --spacing-rl-rail: 264px; /* progress rail width */
+  --spacing-rl-rail-pad-x: 20px; /* rail padding-x */
+  --spacing-rl-rail-row-pad-y: 10px; /* step row padding-y */
+  --spacing-rl-rail-row-pad-x: 12px; /* step row padding-x */
+  --spacing-rl-rail-row-gap: 12px; /* status circle -> text column */
+  --text-rl-rail-title: 14px;
+  --text-rl-rail-title--line-height: 1.35;
+  --text-rl-rail-label: 12px;
+  --text-rl-rail-label--line-height: 1.5;
+
+  --spacing-rl-shell: 1120px; /* shell max width */
+
+  /* -------------------------------------------------------------------------
+     Client View portal -- imported measurement (design-system.md 2.5 terms).
+     Taken verbatim from the "Client View" Claude Design canvas (project
+     0b090685, `Client View.dc.html`): the client-facing portal's content
+     column. Off the 8-pt grid, namespaced to the /portal route.
+     ------------------------------------------------------------------------- */
+  --spacing-rl-portal: 1080px; /* portal content max width */
+
+  /* -------------------------------------------------------------------------
+     Landing page v2 -- imported measurements (design-system.md 2.12).
+     Taken from the "Landing Page v2" Claude Design canvas (project 6a3c89cd,
+     `Landing Page v2.dc.html`). The marketing page uses viewport-fluid type
+     that sits between the base scale's steps, so the clamp() ranges are named
+     here once. Namespaced to the landing app; do not reuse as general steps.
+     Every --text-lp-* token is also listed in cn()'s font-size group.
+     ------------------------------------------------------------------------- */
+  --text-lp-display: clamp(40px, 5.6vw, 72px); /* hero H1 */
+  --text-lp-display--line-height: 1.06;
+  --text-lp-h2: clamp(30px, 4.2vw, 44px); /* section title */
+  --text-lp-h2--line-height: 1.2;
+  --text-lp-h2-sm: clamp(28px, 3.6vw, 40px); /* security title */
+  --text-lp-h2-sm--line-height: 1.2;
+  --text-lp-h2-cta: clamp(30px, 4.6vw, 52px); /* closing CTA title */
+  --text-lp-h2-cta--line-height: 1.12;
+  --text-lp-h2-faq: clamp(26px, 3vw, 32px); /* FAQ title */
+  --text-lp-h2-faq--line-height: 1.2;
+  --text-lp-h3: clamp(19px, 2vw, 22px); /* card title */
+  --text-lp-h3--line-height: 1.2;
+  --text-lp-pain: clamp(22px, 2.6vw, 30px); /* use-case pain statement */
+  --text-lp-pain--line-height: 1.25;
+  --text-lp-lead: clamp(16px, 1.4vw, 18px); /* section lead paragraph */
+  --text-lp-lead--line-height: 1.6;
+  --text-lp-price: 44px; /* plan price */
+  --text-lp-price--line-height: 1;
+  --text-lp-note: clamp(17px, 1.8vw, 22px); /* sticky note (hand font) */
+  --text-lp-note--line-height: 1.15;
+  --text-lp-annot: clamp(20px, 2vw, 26px); /* hero annotation (hand font) */
+  --text-lp-annot--line-height: 1;
+  --text-lp-mock: clamp(11px, 1.05vw, 13px); /* hero mock-up base; children use em */
+  --text-lp-mock--line-height: 1.4;
+
+  --spacing-lp-shell: 1248px; /* landing content max width */
+}
+
+:root {
+  --ring-focus: 0 0 0 2px var(--color-rl-blue);
+  --control-h-sm: 28px;
+  --control-h-md: 36px;
+  --control-h-lg: 44px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border-subtle);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-surface-page);
+    color: var(--color-text-body);
+  }
+  a {
+    color: var(--color-text-link);
+    text-decoration: none;
+  }
+  /* Anything that acts as a button reads as clickable, without each call site
+     repeating `cursor-pointer`. Base layer, so a component's own cursor-*
+     utility still wins. */
+  button,
+  summary,
+  [role="button"] {
+    cursor: pointer;
+  }
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  [role="button"][data-disabled] {
+    cursor: default;
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--ring-focus);
+  }
+  ::selection {
+    background: var(--color-brand-100);
+  }
+}
+
+/* Hide the scrollbar while keeping the element scrollable (used by the
+   horizontal-wizard step rail). */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Keyframes used only by the landing page live in globals.css. */
+@keyframes om-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

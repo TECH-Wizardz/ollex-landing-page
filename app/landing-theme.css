@@ -1,0 +1,198 @@
+/*
+  Landing-only theme layer (docs/landing-design.md), imported by globals.css
+  after tokens.css.
+
+  Two jobs:
+  1. Fonts. The v2 canvas pairs Inter (body), General Sans (headings) and
+     Caveat (hand-drawn accents). The shared --font-sans stays SF Pro for the
+     provider and portal; only this app overrides it. The --font-* variables
+     on the right are set by next/font in app/layout.tsx.
+  2. Light/dark colours. Shared rl-* tokens are fixed light values, so the page
+     reads colour through --lp-* runtime variables that flip with the theme.
+     Light values reference the rl-* tokens; dark values reuse an rl-* token
+     where one matches the canvas and are new only where none does.
+
+  The dark block is written twice (system preference, then an explicit
+  data-theme="dark") because CSS has no way to share a rule between a media
+  query and an attribute selector. Keep the two in sync.
+*/
+
+@theme {
+  --font-sans: var(--font-inter), "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, Arial, sans-serif;
+  --font-display: var(--font-general-sans), var(--font-inter), "SF Pro Display",
+    -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
+
+  /* Illustration palette: the fictional client brands and avatars drawn inside
+     the product mock-ups. Identical in light and dark, like the sticky note. */
+  --color-lp-brand-forest: #2f4b3a;
+  --color-lp-brand-gold: #c9a86a;
+  --color-lp-brand-clay: #8a4b3b;
+  --color-lp-avatar-peach: #f6c9a8;
+  --color-lp-avatar-mint: #bfe3cf;
+  --color-lp-avatar-sky: #bfd3ff;
+  --color-lp-avatar-lilac: #e3d1fb;
+  --color-lp-avatar-butter: #f7e3a6;
+}
+
+:root {
+  color-scheme: light;
+
+  --lp-bg: var(--color-rl-white);
+  --lp-subtle: var(--color-rl-grey);
+  --lp-surface: var(--color-rl-white);
+  --lp-ink: var(--color-rl-black);
+  --lp-on-ink: var(--color-rl-white);
+  --lp-muted: var(--color-rl-grey-70);
+  --lp-border: var(--color-rl-grey-30);
+  --lp-accent: var(--color-rl-blue);
+  --lp-primary: var(--color-rl-blue);
+  --lp-primary-hover: var(--color-rl-blue-hover);
+  --lp-on-primary: var(--color-rl-white);
+  --lp-tint-1: var(--color-rl-blue-lightest);
+  --lp-tint-2: var(--color-rl-violet-surface);
+  --lp-tint-3: var(--color-rl-success-surface);
+  --lp-success: var(--color-rl-success);
+  --lp-danger: var(--color-rl-error);
+  --lp-cream: var(--color-rl-cream);
+  --lp-hl: var(--color-rl-blue-lighter);
+  --lp-sketch: rgb(29 29 31 / 10%);
+  --lp-sketch-strong: rgb(29 29 31 / 26%);
+
+  --lp-b-success-bg: var(--color-rl-success-surface);
+  --lp-b-success-fg: var(--color-rl-success);
+  --lp-b-brand-bg: var(--color-rl-blue-lightest);
+  --lp-b-brand-fg: var(--color-rl-blue);
+  --lp-b-violet-bg: var(--color-rl-violet-surface);
+  --lp-b-violet-fg: var(--color-rl-violet);
+  --lp-b-warn-bg: var(--color-rl-note-yellow);
+  --lp-b-warn-fg: var(--color-rl-warning-dark);
+  --lp-b-danger-bg: var(--color-rl-error-surface);
+  --lp-b-danger-fg: var(--color-rl-error);
+  --lp-b-neutral-bg: var(--color-rl-grey);
+  --lp-b-neutral-fg: var(--color-rl-grey-70);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --lp-bg: var(--color-rl-grey-95);
+    --lp-subtle: var(--color-rl-grey-90);
+    --lp-surface: var(--color-rl-black);
+    --lp-ink: var(--color-rl-white);
+    --lp-on-ink: var(--color-rl-grey-95);
+    --lp-muted: var(--color-rl-grey-50);
+    --lp-border: rgb(255 255 255 / 16%);
+    --lp-accent: var(--color-rl-blue-hover);
+    --lp-tint-1: var(--color-rl-blue-darkest);
+    --lp-tint-2: var(--color-rl-purple-dark);
+    --lp-tint-3: #0d3a1c;
+    --lp-success: #42be65;
+    --lp-danger: #ff8389;
+    --lp-cream: var(--color-rl-black);
+    --lp-hl: rgb(15 98 254 / 38%);
+    --lp-sketch: rgb(255 255 255 / 7%);
+    --lp-sketch-strong: rgb(255 255 255 / 22%);
+
+    --lp-b-success-bg: rgb(25 128 56 / 28%);
+    --lp-b-success-fg: #a7f0ba;
+    --lp-b-brand-bg: rgb(15 98 254 / 28%);
+    --lp-b-brand-fg: var(--color-rl-blue-lighter);
+    --lp-b-violet-bg: rgb(105 41 196 / 32%);
+    --lp-b-violet-fg: #e8daff;
+    --lp-b-warn-bg: rgb(255 221 50 / 18%);
+    --lp-b-warn-fg: var(--color-rl-warning);
+    --lp-b-danger-bg: rgb(218 30 40 / 28%);
+    --lp-b-danger-fg: #ffd7d9;
+    --lp-b-neutral-bg: var(--color-rl-grey-90);
+    --lp-b-neutral-fg: #c6c6c6;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --lp-bg: var(--color-rl-grey-95);
+  --lp-subtle: var(--color-rl-grey-90);
+  --lp-surface: var(--color-rl-black);
+  --lp-ink: var(--color-rl-white);
+  --lp-on-ink: var(--color-rl-grey-95);
+  --lp-muted: var(--color-rl-grey-50);
+  --lp-border: rgb(255 255 255 / 16%);
+  --lp-accent: var(--color-rl-blue-hover);
+  --lp-tint-1: var(--color-rl-blue-darkest);
+  --lp-tint-2: var(--color-rl-purple-dark);
+  --lp-tint-3: #0d3a1c;
+  --lp-success: #42be65;
+  --lp-danger: #ff8389;
+  --lp-cream: var(--color-rl-black);
+  --lp-hl: rgb(15 98 254 / 38%);
+  --lp-sketch: rgb(255 255 255 / 7%);
+  --lp-sketch-strong: rgb(255 255 255 / 22%);
+
+  --lp-b-success-bg: rgb(25 128 56 / 28%);
+  --lp-b-success-fg: #a7f0ba;
+  --lp-b-brand-bg: rgb(15 98 254 / 28%);
+  --lp-b-brand-fg: var(--color-rl-blue-lighter);
+  --lp-b-violet-bg: rgb(105 41 196 / 32%);
+  --lp-b-violet-fg: #e8daff;
+  --lp-b-warn-bg: rgb(255 221 50 / 18%);
+  --lp-b-warn-fg: var(--color-rl-warning);
+  --lp-b-danger-bg: rgb(218 30 40 / 28%);
+  --lp-b-danger-fg: #ffd7d9;
+  --lp-b-neutral-bg: var(--color-rl-grey-90);
+  --lp-b-neutral-fg: #c6c6c6;
+}
+
+/* `inline` keeps these as live var() references, so utilities such as
+   bg-lp-surface follow the runtime variables above when the theme flips. */
+@theme inline {
+  --color-lp-bg: var(--lp-bg);
+  --color-lp-subtle: var(--lp-subtle);
+  --color-lp-surface: var(--lp-surface);
+  --color-lp-ink: var(--lp-ink);
+  --color-lp-on-ink: var(--lp-on-ink);
+  --color-lp-muted: var(--lp-muted);
+  --color-lp-border: var(--lp-border);
+  --color-lp-accent: var(--lp-accent);
+  --color-lp-primary: var(--lp-primary);
+  --color-lp-primary-hover: var(--lp-primary-hover);
+  --color-lp-on-primary: var(--lp-on-primary);
+  --color-lp-tint-1: var(--lp-tint-1);
+  --color-lp-tint-2: var(--lp-tint-2);
+  --color-lp-tint-3: var(--lp-tint-3);
+  --color-lp-success: var(--lp-success);
+  --color-lp-danger: var(--lp-danger);
+  --color-lp-cream: var(--lp-cream);
+  --color-lp-hl: var(--lp-hl);
+  --color-lp-sketch: var(--lp-sketch);
+  --color-lp-sketch-strong: var(--lp-sketch-strong);
+
+  --color-lp-b-success-bg: var(--lp-b-success-bg);
+  --color-lp-b-success-fg: var(--lp-b-success-fg);
+  --color-lp-b-brand-bg: var(--lp-b-brand-bg);
+  --color-lp-b-brand-fg: var(--lp-b-brand-fg);
+  --color-lp-b-violet-bg: var(--lp-b-violet-bg);
+  --color-lp-b-violet-fg: var(--lp-b-violet-fg);
+  --color-lp-b-warn-bg: var(--lp-b-warn-bg);
+  --color-lp-b-warn-fg: var(--lp-b-warn-fg);
+  --color-lp-b-danger-bg: var(--lp-b-danger-bg);
+  --color-lp-b-danger-fg: var(--lp-b-danger-fg);
+  --color-lp-b-neutral-bg: var(--lp-b-neutral-bg);
+  --color-lp-b-neutral-fg: var(--lp-b-neutral-fg);
+}
+
+@layer base {
+  body {
+    background: var(--lp-bg);
+    color: var(--lp-ink);
+  }
+  a {
+    color: var(--lp-accent);
+  }
+  ::selection {
+    background: var(--lp-hl);
+  }
+}
