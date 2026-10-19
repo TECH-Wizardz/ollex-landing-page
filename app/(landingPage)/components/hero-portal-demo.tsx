@@ -1,27 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Bell, Check, Lock } from "lucide-react";
 
-import { cn } from "@onbora/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { PRODUCT_NAME } from "@/lib/brand";
+import { HERO_SCENARIOS, type HeroScenario } from "./hero-scenarios.data";
 import { MockCard } from "./mock-card";
 import { StatusPill } from "./status-pill";
 
-const ITEMS = [
-  "Bank statement",
-  "Payroll report",
-  "Engagement letter",
-  "Amex statement",
-  "June receipts",
-];
-
 const START = 2;
-const TOTAL = ITEMS.length;
+const TOTAL = 5;
 
 // The checklist ticks 2 → 5 of 5 on a timer; the chaos around it fades in step.
 const STEP_START_MS = 1600;
 const STEP_EVERY_MS = 1100;
+// How long the finished frame stays up, and the fade between scenes.
+const HOLD_MS = 3200;
+const FADE_MS = 400;
 
 const CHAOS_CARD =
   "absolute rounded-lg border border-lp-border bg-lp-surface shadow-rl-1 transition-[opacity,transform,filter] duration-900 ease-in-out";
@@ -29,22 +25,91 @@ const CHAOS_CARD =
 /**
  * The hero's illustration: a pile of chase emails, texts, a misnamed file and a
  * sticky note fades away while a client's checklist fills up and the reminders
- * stop. Renders its final frame at once for reduced-motion visitors.
+ * stop. It then fades to the next scenario in `HERO_SCENARIOS` and plays again,
+ * looping. The loop only advances while the illustration is on screen, and
+ * reduced-motion visitors get the first scenario's final frame and nothing else.
  */
 export function HeroPortalDemo() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [inView, setInView] = useState(true);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting)
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Fade out once the scene has finished and is actually being looked at, then
+  // swap it. The swap remounts the stage (see `key`), which resets its state
+  // without the 900ms transitions animating the chaos back in.
+  const leaving = finished && inView;
+  useEffect(() => {
+    if (!leaving) return;
+    const timer = setTimeout(() => {
+      setIndex((i) => (i + 1) % HERO_SCENARIOS.length);
+      setFinished(false);
+    }, FADE_MS);
+    return () => clearTimeout(timer);
+  }, [leaving]);
+
+  const onFinished = useCallback(() => setFinished(true), []);
+  const scenario = HERO_SCENARIOS[index];
+
+  return (
+    <div
+      ref={ref}
+      role="img"
+      aria-label={`Follow-up emails, a sticky note and a misnamed file fade away while a client's ${PRODUCT_NAME} checklist fills from 2 of 5 to 5 of 5 and reminders stop`}
+      className="relative mx-auto aspect-[1/1.04] w-full max-w-140 text-lp-mock"
+    >
+      <ScenarioStage
+        key={scenario.key}
+        scenario={scenario}
+        leaving={leaving}
+        enter={index > 0}
+        onFinished={onFinished}
+      />
+    </div>
+  );
+}
+
+function ScenarioStage({
+  scenario,
+  leaving,
+  enter,
+  onFinished,
+}: {
+  scenario: HeroScenario;
+  leaving: boolean;
+  enter: boolean;
+  onFinished: () => void;
+}) {
   const [done, setDone] = useState(START);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timers = reduce
-      ? [setTimeout(() => setDone(TOTAL), 0)]
-      : [3, 4, 5].map((n, i) =>
-          setTimeout(() => setDone(n), STEP_START_MS + i * STEP_EVERY_MS)
-        );
+    if (reduce) {
+      const timer = setTimeout(() => setDone(TOTAL), 0);
+      return () => clearTimeout(timer);
+    }
+    const lastTickAt = STEP_START_MS + (TOTAL - START - 1) * STEP_EVERY_MS;
+    const timers = [
+      ...[3, 4, 5].map((n, i) =>
+        setTimeout(() => setDone(n), STEP_START_MS + i * STEP_EVERY_MS)
+      ),
+      setTimeout(onFinished, lastTickAt + HOLD_MS),
+    ];
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [onFinished]);
 
-  const missing = ITEMS.slice(done);
+  const { items } = scenario;
+  const missing = items.slice(done);
   const allDone = missing.length === 0;
   const step = done - START;
   const fade = step / (TOTAL - START);
@@ -57,9 +122,11 @@ export function HeroPortalDemo() {
 
   return (
     <div
-      role="img"
-      aria-label={`Follow-up emails, a sticky note and a misnamed file fade away while a client's ${PRODUCT_NAME} checklist fills from 2 of 5 to 5 of 5 and reminders stop`}
-      className="relative mx-auto aspect-[1/1.04] w-full max-w-140 text-lp-mock"
+      className={cn(
+        "absolute inset-0 transition-opacity duration-400 ease-in-out",
+        leaving && "opacity-0",
+        enter && "animate-in fade-in"
+      )}
     >
       <svg
         aria-hidden="true"
@@ -90,16 +157,16 @@ export function HeroPortalDemo() {
         style={chaos(`translate(${-step * 6}px,${-step * 5}px) rotate(-5deg)`)}
       >
         <div className="flex items-center justify-between gap-2 text-[0.9em] text-lp-muted">
-          <span>To: Sam&apos;s Bakery</span>
+          <span>To: {scenario.email.to}</span>
           <StatusPill tone="warn" shape="chip">
-            4th follow-up
+            {scenario.email.chip}
           </StatusPill>
         </div>
         <div className="mt-1.5 truncate font-semibold text-lp-ink">
-          Re: Re: Fwd: June documents
+          {scenario.email.subject}
         </div>
         <div className="mt-0.75 leading-snug text-lp-muted">
-          Just following up again on the Amex statement…
+          {scenario.email.preview}
         </div>
       </div>
 
@@ -107,9 +174,11 @@ export function HeroPortalDemo() {
         className={cn(CHAOS_CARD, "top-0 right-0 w-[42%] px-3 py-2.5")}
         style={chaos(`translate(${step * 6}px,${-step * 6}px) rotate(4deg)`)}
       >
-        <div className="mb-1.5 text-[0.9em] text-lp-muted">Text · Sam</div>
+        <div className="mb-1.5 text-[0.9em] text-lp-muted">
+          Text · {scenario.text.from}
+        </div>
         <div className="rounded-xl rounded-bl-rl-4 bg-lp-subtle px-2.5 py-2 leading-snug text-lp-ink">
-          Sorry, which file did you need again?
+          {scenario.text.message}
         </div>
       </div>
 
@@ -125,9 +194,11 @@ export function HeroPortalDemo() {
         </span>
         <div className="min-w-0">
           <div className="truncate font-medium text-lp-ink">
-            receipts_FINAL_v3 (2).pdf
+            {scenario.file.name}
           </div>
-          <div className="text-[0.9em] text-lp-b-danger-fg">Wrong month</div>
+          <div className="text-[0.9em] text-lp-b-danger-fg">
+            {scenario.file.problem}
+          </div>
         </div>
       </div>
 
@@ -135,15 +206,15 @@ export function HeroPortalDemo() {
         className="absolute right-[1%] bottom-[4%] aspect-[1/0.92] w-[33%] rounded-xs bg-rl-note-yellow px-3.5 py-3 font-hand text-lp-note font-semibold text-rl-black shadow-rl-2 transition-[opacity,transform,filter] duration-900 ease-in-out"
         style={chaos(`translate(${step * 6}px,${step * 6}px) rotate(-7deg)`)}
       >
-        Chase Sam for the Amex statement!!
+        {scenario.note}
         <span className="mt-1 block text-[0.8em] text-rl-grey-70">(again)</span>
       </div>
 
       <MockCard className="absolute top-[52%] left-1/2 z-[3] w-[clamp(232px,62%,350px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-rl-4">
         <div className="flex items-center justify-between gap-2 border-b border-lp-border px-4 py-3">
           <span className="flex items-center gap-2 text-[1.05em] font-semibold text-lp-ink">
-            <span className="size-5 rounded-rl-6 bg-lp-brand-forest" />
-            Ledgerline
+            <span className={cn("size-5 rounded-rl-6", scenario.brandClass)} />
+            {scenario.brand}
           </span>
           <span className="inline-flex items-center gap-1 text-[0.9em] font-medium text-lp-success">
             <Lock size={12} strokeWidth={2.4} />
@@ -153,10 +224,10 @@ export function HeroPortalDemo() {
 
         <div className="px-4 pt-3.5 pb-1.5">
           <div className="text-[0.92em] text-lp-muted">
-            Hi Sam, here&apos;s what we need
+            Hi {scenario.client}, here&apos;s what we need
           </div>
           <div className="mt-0.5 font-display text-[1.35em] leading-tight font-semibold tracking-[-0.01em] text-lp-ink">
-            Q2 tax records
+            {scenario.title}
           </div>
           <div className="mt-2.5 flex items-center gap-2.5">
             <div className="h-2 flex-1 overflow-hidden rounded-rl-full bg-lp-subtle">
@@ -172,7 +243,7 @@ export function HeroPortalDemo() {
         </div>
 
         <ul className="flex flex-col gap-0.5 px-2.5 pt-1 pb-2.5">
-          {ITEMS.map((name, i) => {
+          {items.map((name, i) => {
             const isDone = i < done;
             return (
               <li
