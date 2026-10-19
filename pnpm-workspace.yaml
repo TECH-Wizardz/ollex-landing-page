@@ -1,0 +1,4 @@
+# pnpm 10 blocks dependency lifecycle scripts by default. Anything new that
+# needs a build script must be reviewed and added here deliberately.
+onlyBuiltDependencies:
+  - unrs-resolver
