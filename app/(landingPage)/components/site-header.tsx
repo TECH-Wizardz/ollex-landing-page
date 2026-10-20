@@ -105,9 +105,11 @@ export function SiteHeader() {
               </div>
             ) : null}
           </div>
+          {/* Hidden while the pricing section is hidden.
           <Link href="#pricing" className={NAV_LINK}>
             Pricing
           </Link>
+          */}
           <Link href="#resources" className={NAV_LINK}>
             Resources
           </Link>
@@ -153,6 +155,7 @@ export function SiteHeader() {
               {USE_CASES[key].label}
             </Link>
           ))}
+          {/* Hidden while the pricing section is hidden.
           <Link
             href="#pricing"
             onClick={() => setMenuOpen(false)}
@@ -160,6 +163,7 @@ export function SiteHeader() {
           >
             Pricing
           </Link>
+          */}
           <Link
             href="#resources"
             onClick={() => setMenuOpen(false)}

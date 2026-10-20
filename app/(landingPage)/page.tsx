@@ -7,7 +7,8 @@ import { FeaturesSection } from "./components/features-section";
 import { GetStartedDialogProvider } from "./components/get-started-dialog-provider";
 import { HeroSection } from "./components/hero-section";
 import { MobileCtaBar } from "./components/mobile-cta-bar";
-import { PricingSection } from "./components/pricing-section";
+// Pricing is hidden for now. It also holds the FAQ.
+// import { PricingSection } from "./components/pricing-section";
 import { ProofSection } from "./components/proof-section";
 import { ProviderSection } from "./components/provider-section";
 import { SecuritySection } from "./components/security-section";
@@ -33,7 +34,7 @@ export default function Home() {
             <UseCasesSection />
             <ProofSection />
             <SecuritySection />
-            <PricingSection />
+            {/* <PricingSection /> */}
             <CtaSection />
           </main>
         </UseCaseProvider>

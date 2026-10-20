@@ -29,7 +29,7 @@ The provider and the client portal link back to this site through their own `NEX
 
 ## Before deploying
 
-Several links, the pricing tiers and the pilot-customer quotes are placeholders. Send one real email through the form first (Web3Forms may ask you to verify the destination address). See `CLAUDE.md` for the list.
+Several links, the pricing tiers and the pilot-customer quotes are placeholders, and the pricing section (with the FAQ) is hidden for now. Send one real email through the form first (Web3Forms may ask you to verify the destination address). See `CLAUDE.md` for the list.
 
 ## Layout
 

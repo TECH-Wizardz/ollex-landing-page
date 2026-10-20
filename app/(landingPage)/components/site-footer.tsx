@@ -8,7 +8,8 @@ import { ThemeSwitch } from "./theme-switch";
 const COLUMNS = [
   {
     heading: "Product",
-    links: ["Client portal", "Reminders", "Assistant", "Pricing"],
+    // "Pricing" is hidden while the pricing section is hidden.
+    links: ["Client portal", "Reminders", "Assistant"],
   },
   {
     heading: "Use cases",
