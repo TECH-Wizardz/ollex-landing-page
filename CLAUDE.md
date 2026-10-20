@@ -10,7 +10,7 @@ The public marketing site for Ollex. A standalone Next.js (App Router) app, dev/
 
 ## Commands
 pnpm 10, Node 22+.
-- `pnpm install`. No env file is needed: the site reads no environment variables.
+- `pnpm install`, then `cp .env.example .env.local` and set `WEB3FORM_ACCESS_KEY` (the Get started form needs it; `pnpm build` fails without it)
 - `pnpm dev` / `pnpm build` / `pnpm start` - port 3001
 - `pnpm typecheck` - `next typegen && tsc --noEmit`. The typegen step matters: `LayoutProps<"/">` in `app/layout.tsx` is a generated type, and it only exists in the gitignored `.next/` output, so a bare `tsc` fails on a fresh checkout.
 - `pnpm lint` - ESLint, then `check:cn`; `pnpm check:cn` runs just the token check (`scripts/check-cn.mts`, run by Node directly, no build step)
@@ -26,8 +26,8 @@ pnpm 10, Node 22+.
 - **Favicon** is the navbar `LogoMark` redrawn as `app/icon.svg` (it inverts under `prefers-color-scheme: dark`; the explicit theme toggle can't reach it) plus a fixed dark `app/favicon.ico` (16/32/48 px PNGs) as the legacy fallback. If `logo-mark.tsx` changes shape or colour, redraw both by hand: nothing generates them.
 - **Theme**: `data-theme` on `<html>` beats `prefers-color-scheme`. The choice is stored in `localStorage` (`ollex-theme`) and applied by an inline `<script>` in `<head>` (`lib/theme.ts`). It must stay a plain inline script: `next/script` queues even `beforeInteractive` inline scripts behind Next's async runtime, so it flashes the wrong theme.
 - `track()` (`lib/track.ts`) reports to Plausible if `window.plausible` exists and is otherwise a no-op. "Get started" is a `GetStartedButton`; opening the modal fires `cta_get_started_click` with the `section` it came from, and a valid submit fires `get_started_submit`.
-- **Get started modal**: one native `<dialog>` (`GetStartedDialog`) owned by `GetStartedDialogProvider`, so any `GetStartedButton` (or `useGetStartedDialog().open(section)`) can open it. It asks for an email only and follows the `--lp-*` theme colours. **Submitting does not send anything yet**: `submitGetStarted()` in `lib/get-started.ts` is a stub, so the "Thanks, we've got it" screen is untrue until a real backend replaces it. Do not deploy before that.
-- Placeholders that need real values: the get-started submit itself (above), "Read our security overview" (`#security`), footer and social links (`#`), the pricing tiers and the three pilot-customer quotes.
+- **Get started modal**: one native `<dialog>` (`GetStartedDialog`) owned by `GetStartedDialogProvider`, so any `GetStartedButton` (or `useGetStartedDialog().open(section)`) can open it. It asks for an email only and follows the `--lp-*` theme colours. **Submitting emails the address to the site owner through Web3Forms**: `submitGetStarted()` in `lib/get-started.ts` is a browser `fetch` to `api.web3forms.com/submit`. It runs client-side on purpose, because Web3Forms' free plan rejects server-side calls (paid plan plus IP whitelisting) and its access key is public by design (free plan: about 250 submissions a month). `WEB3FORM_ACCESS_KEY` has no `NEXT_PUBLIC_` prefix, so `next.config.ts` inlines it into the client bundle through `env`; never put a real secret there. A missing key or a rejected request throws, so the modal shows its error message instead of "Thanks". A hidden `botcheck` checkbox is Web3Forms' honeypot.
+- Placeholders that need real values: "Read our security overview" (`#security`), footer and social links (`#`), the pricing tiers and the three pilot-customer quotes.
 - Keyframes used only by this app (`lp-highlight`, `lp-strike`) and the `lp-dots` / reveal rules live in `app/globals.css`.
 - Lint forbids importing `@clerk/*`, react-query or firebase here; keep this app light.
 - The provider (and the client portal) find this site through their own `NEXT_PUBLIC_LANDING_URL`, so changing this site's origin means updating that variable there.

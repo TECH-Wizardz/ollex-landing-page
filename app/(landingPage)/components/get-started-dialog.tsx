@@ -44,11 +44,12 @@ export function GetStartedDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
     setEmailError(null);
     setStatus("sending");
     try {
-      await submitGetStarted({ email });
+      await submitGetStarted({ email, botcheck: data.has("botcheck") });
       track("get_started_submit");
       setSentTo(email);
       setStatus("sent");
-    } catch {
+    } catch (error) {
+      console.error("[get-started] submit failed:", error);
       setStatus("error");
     }
   }
@@ -158,6 +159,16 @@ export function GetStartedDialog({ ref }: { ref: Ref<HTMLDialogElement> }) {
                   </p>
                 ) : null}
               </div>
+
+              {/* Web3Forms' honeypot: hidden from people, ticked by bots. */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
+              />
 
               <div className="flex flex-col gap-3">
                 <button

@@ -8,27 +8,32 @@ Needs Node 22+ and pnpm 10.
 
 ```bash
 pnpm install
-pnpm dev     # http://localhost:3001
+cp .env.example .env.local   # then set WEB3FORM_ACCESS_KEY
+pnpm dev                     # http://localhost:3001
 ```
 
 | Command | What it does |
 |---|---|
 | `pnpm dev` / `pnpm start` | Serve on port 3001 |
-| `pnpm build` | Production build |
+| `pnpm build` | Production build (fails without `WEB3FORM_ACCESS_KEY`) |
 | `pnpm typecheck` | `next typegen && tsc --noEmit` |
 | `pnpm lint` | ESLint, then `check:cn` (keeps `cn()` in step with the font-size tokens) |
 
 ## Environment
 
-The site reads no environment variables. The provider and the client portal link back to this site through their own `NEXT_PUBLIC_LANDING_URL`.
+| Variable | Purpose |
+|---|---|
+| `WEB3FORM_ACCESS_KEY` | [Web3Forms](https://web3forms.com) access key for the "Get started" email form. Required for production builds. It is public by design and is inlined into the browser bundle, because Web3Forms' free plan only accepts browser submissions. |
+
+The provider and the client portal link back to this site through their own `NEXT_PUBLIC_LANDING_URL`.
 
 ## Before deploying
 
-"Get started" does not send anything yet (`submitGetStarted()` in `lib/get-started.ts` is a stub), and several links, pricing tiers and quotes are placeholders. See `CLAUDE.md` for the list.
+Several links, the pricing tiers and the pilot-customer quotes are placeholders. Send one real email through the form first (Web3Forms may ask you to verify the destination address). See `CLAUDE.md` for the list.
 
 ## Layout
 
 - `app/(landingPage)/` the page and its section components
 - `app/tokens.css` design tokens, `app/landing-theme.css` fonts and the light/dark layer
-- `lib/` brand, theme, analytics, the get-started stub, `cn()`
+- `lib/` brand, theme, analytics, the Web3Forms get-started submit, `cn()`
 - `docs/landing-design.md` how the design canvas maps onto the tokens
