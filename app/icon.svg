@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The navbar LogoMark (components/logo-mark.tsx): a dark rounded square with
+       a light dot, 8px radius and a 10px dot on a 26px square. It inverts on a
+       dark browser theme the way the page's own ink and surface colours do. -->
+  <style>
+    .mark { fill: #1d1d1f; }
+    .dot { fill: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .mark { fill: #ffffff; }
+      .dot { fill: #1d1d1f; }
+    }
+  </style>
+  <rect class="mark" width="32" height="32" rx="9.85" />
+  <circle class="dot" cx="16" cy="16" r="6.15" />
+</svg>
