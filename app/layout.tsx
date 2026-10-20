@@ -30,7 +30,7 @@ const generalSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: `${PRODUCT_NAME} — Client portal that chases missing documents for you`,
+  title: `${PRODUCT_NAME} - Client portal`,
   description: `Send clients one link. ${PRODUCT_NAME} collects files, forms and answers, and reminds them about what's missing. No passwords. Free 14-day trial.`,
 };
 
