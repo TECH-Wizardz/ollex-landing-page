@@ -53,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${caveat.variable} ${generalSans.variable} h-full scroll-smooth antialiased`}
     >
       <head>
+      <meta name="google-site-verification" content="uvnxPZYjjALCQ8ALaRHLP5bPp-0QaTqizol71uWvOEg" />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
