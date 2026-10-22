@@ -24,6 +24,7 @@ pnpm dev                     # http://localhost:3001
 | Variable | Purpose |
 |---|---|
 | `WEB3FORM_ACCESS_KEY` | [Web3Forms](https://web3forms.com) access key for the "Get started" email form. Required for production builds. It is public by design and is inlined into the browser bundle, because Web3Forms' free plan only accepts browser submissions. |
+| `GOOGLE_ANALYTICS_ID` | Google Analytics 4 measurement ID (`G-XXXXXXXXXX`). Optional: when empty, no analytics script is loaded. Read at build time, so set it before `pnpm build`. |
 
 The provider and the client portal link back to this site through their own `NEXT_PUBLIC_LANDING_URL`.
 

@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Caveat, Inter } from "next/font/google";
 import localFont from "next/font/local";
@@ -34,6 +35,10 @@ export const metadata: Metadata = {
   description: `Send clients one link. ${PRODUCT_NAME} collects files, forms and answers, and reminds them about what's missing. No passwords. Free 14-day trial.`,
 };
 
+// Read on the server at build time (this layout is static), so it needs no
+// NEXT_PUBLIC_ prefix. Unset means no analytics, which keeps local dev quiet.
+const GOOGLE_ANALYTICS_ID = process.env.GOOGLE_ANALYTICS_ID;
+
 // No auth provider here: sign-in and sign-up live entirely in the provider app.
 // suppressHydrationWarning: the theme script sets `data-theme` on <html>
 // before React hydrates. It is a plain inline <script> rather than next/script
@@ -51,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
+      {GOOGLE_ANALYTICS_ID ? <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} /> : null}
     </html>
   );
 }
